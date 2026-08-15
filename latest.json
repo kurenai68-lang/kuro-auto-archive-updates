@@ -1,0 +1,5 @@
+{
+  "version": "1.0.18",
+  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates",
+  "notes": "自動アップデート確認の公式更新情報URLを標準設定しました。v1.0.17までの監視・Discord通知・履歴検索・重複防止・ディスク容量監視・URL投稿改善を維持しています。"
+}
