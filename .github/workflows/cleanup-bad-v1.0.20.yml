@@ -1,0 +1,20 @@
+name: Cleanup bad v1.0.20 asset
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[cleanup-bad-v1.0.20]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Remove bad Setup asset if present
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete-asset v1.0.20 KURO_Auto_Archive_v1.0.20_Simple_Setup.exe --repo "$GITHUB_REPOSITORY" --yes || true
