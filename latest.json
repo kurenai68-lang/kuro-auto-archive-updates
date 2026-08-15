@@ -1,5 +1,5 @@
 {
-  "version": "1.0.19",
-  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates",
-  "notes": "自動アップデート確認の実地テスト用リリースです。機能変更はなく、v1.0.18の安定版機能をそのまま維持しています。"
+  "version": "1.0.20",
+  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases",
+  "notes": "新版検出時に『アップデートをダウンロード』ボタンを表示し、GitHub Releasesページを開けるようにしました。自動ダウンロード・自動インストールは行いません。"
 }
