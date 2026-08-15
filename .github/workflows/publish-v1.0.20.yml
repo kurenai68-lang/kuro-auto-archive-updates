@@ -1,0 +1,32 @@
+name: Publish v1.0.20 Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[publish-v1.0.20]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create or update v1.0.20 release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ASSET="release-assets/KURO_Auto_Archive_v1.0.20_Simple_Setup.exe"
+          if gh release view v1.0.20 >/dev/null 2>&1; then
+            gh release upload v1.0.20 "$ASSET" --clobber
+          else
+            gh release create v1.0.20 "$ASSET" \
+              --title "KURO Auto Archive v1.0.20" \
+              --notes "v1.0.20: 新版検出時にダウンロードボタンを表示し、GitHub Releasesを開けるようにしました。監視・Discord完了通知・履歴検索・重複防止・ディスク容量監視など既存機能を維持しています。"
+          fi
