@@ -1,5 +1,5 @@
 {
-  "version": "1.0.20",
-  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases",
-  "notes": "新版検出時に『アップデートをダウンロード』ボタンを表示し、GitHub Releasesページを開けるようにしました。自動ダウンロード・自動インストールは行いません。"
+  "version": "1.0.22",
+  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases/tag/v1.0.22",
+  "notes": "v1.0.22: アップデート動作確認用。v1.0.21.1のTwitch共通ログイン方式と既存機能を維持したバージョン更新テストです。"
 }
