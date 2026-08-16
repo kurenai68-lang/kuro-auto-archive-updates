@@ -1,5 +1,5 @@
 {
   "version": "1.0.22",
-  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases/tag/v1.0.22",
-  "notes": "v1.0.22: アップデート動作確認用。v1.0.21.1のTwitch共通ログイン方式と既存機能を維持したバージョン更新テストです。"
+  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases/download/v1.0.22/KURO_Auto_Archive_v1.0.22_NoInstaller.zip",
+  "notes": "v1.0.22: アップデート動作確認用。ダウンロードボタンからNoInstaller.zipを直接取得する方式へ変更。v1.0.21.1のTwitch共通ログイン方式と既存機能を維持しています。"
 }
