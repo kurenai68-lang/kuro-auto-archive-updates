@@ -1,0 +1,25 @@
+name: Create v1.0.22 test release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  create-release:
+    if: github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[create-v1.0.22-release]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create test release if missing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v1.0.22 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release edit v1.0.22 --repo "$GITHUB_REPOSITORY" --title "KURO Auto Archive v1.0.22" --notes "v1.0.22: アップデート動作確認用。v1.0.21.1のTwitch共通ログイン方式と既存機能を維持したバージョン更新テストです。" --latest
+          else
+            gh release create v1.0.22 --repo "$GITHUB_REPOSITORY" --title "KURO Auto Archive v1.0.22" --notes "v1.0.22: アップデート動作確認用。v1.0.21.1のTwitch共通ログイン方式と既存機能を維持したバージョン更新テストです。" --latest
+          fi
