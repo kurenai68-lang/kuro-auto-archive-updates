@@ -1,0 +1,35 @@
+name: Build EXE Launcher Test
+
+on:
+  push:
+    branches:
+      - build/v1.0.25-exe-launcher-test
+    paths:
+      - 'exe-launcher/**'
+      - '.github/workflows/build-exe-launcher-test.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish Windows EXE
+        shell: pwsh
+        run: |
+          dotnet publish .\exe-launcher\KUROAutoArchiveLauncher.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o .\out
+          if (!(Test-Path '.\out\KUROAutoArchiveLauncher.exe')) { throw 'Launcher EXE was not produced.' }
+          Rename-Item '.\out\KUROAutoArchiveLauncher.exe' 'KURO Auto Archive.exe'
+
+      - name: Upload launcher
+        uses: actions/upload-artifact@v4
+        with:
+          name: KURO-Auto-Archive-v1.0.25-EXE-Launcher
+          path: out/KURO Auto Archive.exe
+          if-no-files-found: error
