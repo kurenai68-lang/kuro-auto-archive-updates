@@ -1,9 +1,9 @@
-name: Build Native v1.0.26 Test
+name: Build Native v1.0.26.1 OAuth Diagnostic
 
 on:
   push:
     branches:
-      - build/v1.0.26-native-test
+      - build/v1.0.26.1-oauth-diagnostic
     paths:
       - 'native-v1.0.26/**'
       - '.github/workflows/build-native-v1.0.26-test.yml'
@@ -43,13 +43,18 @@ jobs:
         shell: pwsh
         run: |
           @'
-          KURO Auto Archive v1.0.26 Native TEST
+          KURO Auto Archive v1.0.26.1 OAuth Diagnostic TEST
 
           Purpose:
           - Native C# WinForms test. No PowerShell or CMD is launched.
-          - Tests config compatibility, Twitch OAuth, and YouTube OAuth.
+          - Diagnose Google OAuth token exchange failures.
 
-          Included in this test:
+          Diagnostic change:
+          - HTTP API errors now show Google error / error_description instead of only "HTTP 400".
+          - The app log records the exception message through the existing failure logger.
+          - Authorization code, refresh token, access token, and PKCE code_verifier are NOT printed by this diagnostic change.
+
+          Existing native test features:
           - Read/save %APPDATA%\KURO_TwitchAutoArchive\config.dat with DPAPI CurrentUser
           - Twitch shared public Client ID + Device Code Flow
           - YouTube embedded Desktop Client ID + PKCE(S256) + 127.0.0.1 random loopback port
@@ -64,13 +69,13 @@ jobs:
 
           Important:
           This build is NOT code-signed. Smart App Control may still block it on PCs where Smart App Control is ON.
-          '@ | Set-Content -Path '.\out\NATIVE_TEST_NOTES_v1.0.26.txt' -Encoding UTF8
+          '@ | Set-Content -Path '.\out\OAUTH_DIAGNOSTIC_NOTES_v1.0.26.1.txt' -Encoding UTF8
 
       - name: Upload native test
         uses: actions/upload-artifact@v4
         with:
-          name: KURO-Auto-Archive-v1.0.26-Native-TEST
+          name: KURO-Auto-Archive-v1.0.26.1-OAuth-Diagnostic-TEST
           path: |
             out/KURO Auto Archive.exe
-            out/NATIVE_TEST_NOTES_v1.0.26.txt
+            out/OAUTH_DIAGNOSTIC_NOTES_v1.0.26.1.txt
           if-no-files-found: error
