@@ -23,7 +23,7 @@ internal static class Program
 internal static class AppInfo
 {
     public const string Name = "KURO Auto Archive";
-    public const string Version = "1.0.26";
+    public const string Version = "1.0.26.1";
     public const string TwitchClientId = "ujcqifi2ej0ayauu6dmu5pk04ilb98";
     public const string YouTubeClientId = "1099154611642-vhmfjad8545rjgs6rhp04fcfi3tlujj7.apps.googleusercontent.com";
     public const string YouTubeScope = "https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly";
@@ -171,8 +171,35 @@ internal sealed class ApiException : Exception
 {
     public HttpStatusCode? StatusCode { get; }
     public string ResponseBody { get; }
-    public ApiException(string message, HttpStatusCode? status = null, string body = "") : base(message)
-    { StatusCode = status; ResponseBody = body; }
+
+    public ApiException(string message, HttpStatusCode? status = null, string body = "") : base(BuildMessage(message, body))
+    {
+        StatusCode = status;
+        ResponseBody = body;
+    }
+
+    private static string BuildMessage(string message, string body)
+    {
+        if (string.IsNullOrWhiteSpace(body)) return message;
+        try
+        {
+            if (JsonNode.Parse(body) is JsonObject obj)
+            {
+                var error = obj["error"]?.GetValue<string>() ?? "";
+                var description = obj["error_description"]?.GetValue<string>() ?? "";
+                var apiMessage = obj["message"]?.GetValue<string>() ?? "";
+                if (!string.IsNullOrWhiteSpace(error) || !string.IsNullOrWhiteSpace(description))
+                    return $"{message}\r\nerror: {error}\r\ndescription: {description}";
+                if (!string.IsNullOrWhiteSpace(apiMessage))
+                    return $"{message}\r\nmessage: {apiMessage}";
+            }
+        }
+        catch { }
+
+        var compact = body.Replace("\r", " ").Replace("\n", " ").Trim();
+        if (compact.Length > 800) compact = compact[..800] + "...";
+        return $"{message}\r\nresponse: {compact}";
+    }
 }
 
 internal static class HttpUtil
