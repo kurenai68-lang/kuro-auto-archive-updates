@@ -1,0 +1,63 @@
+name: Build Native v1.0.26 Test
+
+on:
+  push:
+    branches:
+      - build/v1.0.26-native-test
+    paths:
+      - 'native-v1.0.26/**'
+      - '.github/workflows/build-native-v1.0.26-test.yml'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish native Windows EXE
+        shell: pwsh
+        run: |
+          dotnet publish .\native-v1.0.26\KUROAutoArchiveNative.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o .\out
+          if (!(Test-Path '.\out\KURO Auto Archive.exe')) { throw 'Native EXE was not produced.' }
+          Get-FileHash '.\out\KURO Auto Archive.exe' -Algorithm SHA256 | Format-List
+
+      - name: Write test notes
+        shell: pwsh
+        run: |
+          @'
+          KURO Auto Archive v1.0.26 Native TEST
+
+          Purpose:
+          - Native C# WinForms test. No PowerShell or CMD is launched.
+          - Tests config compatibility, Twitch OAuth, and YouTube OAuth.
+
+          Included in this test:
+          - Read/save %APPDATA%\KURO_TwitchAutoArchive\config.dat with DPAPI CurrentUser
+          - Twitch shared public Client ID + Device Code Flow
+          - YouTube embedded Desktop Client ID + PKCE(S256) + 127.0.0.1 random loopback port
+          - YouTube token storage in DPAPI-protected youtube_token.dat
+
+          NOT included yet:
+          - VOD monitoring
+          - yt-dlp download
+          - YouTube video upload
+          - Discord / queue / history / updater
+
+          Important:
+          This build is NOT code-signed. Smart App Control may still block it on PCs where Smart App Control is ON.
+          '@ | Set-Content -Path '.\out\NATIVE_TEST_NOTES_v1.0.26.txt' -Encoding UTF8
+
+      - name: Upload native test
+        uses: actions/upload-artifact@v4
+        with:
+          name: KURO-Auto-Archive-v1.0.26-Native-TEST
+          path: |
+            out/KURO Auto Archive.exe
+            out/NATIVE_TEST_NOTES_v1.0.26.txt
+          if-no-files-found: error
