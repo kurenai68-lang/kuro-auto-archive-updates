@@ -27,6 +27,18 @@ jobs:
           if (!(Test-Path '.\out\KURO Auto Archive.exe')) { throw 'Native EXE was not produced.' }
           Get-FileHash '.\out\KURO Auto Archive.exe' -Algorithm SHA256 | Format-List
 
+      - name: Native launch smoke test
+        shell: pwsh
+        run: |
+          $p = Start-Process -FilePath '.\out\KURO Auto Archive.exe' -PassThru
+          Start-Sleep -Seconds 5
+          $p.Refresh()
+          if ($p.HasExited) {
+            throw "Native EXE exited too early. ExitCode=$($p.ExitCode)"
+          }
+          Stop-Process -Id $p.Id -Force
+          Write-Host 'Native EXE launch smoke test OK (process remained alive for 5 seconds).'
+
       - name: Write test notes
         shell: pwsh
         run: |
@@ -42,6 +54,7 @@ jobs:
           - Twitch shared public Client ID + Device Code Flow
           - YouTube embedded Desktop Client ID + PKCE(S256) + 127.0.0.1 random loopback port
           - YouTube token storage in DPAPI-protected youtube_token.dat
+          - CI launch smoke test: EXE remained running for at least 5 seconds on Windows
 
           NOT included yet:
           - VOD monitoring
