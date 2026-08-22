@@ -1,5 +1,5 @@
 {
-  "version": "1.0.22",
-  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases/download/v1.0.22/KURO_Auto_Archive_v1.0.22_Standard_Setup.exe",
-  "notes": "v1.0.22: Standard Setup正式採用。従来の独自自己展開方式を廃止し、ブラウザ保存・起動・Twitch/YouTube接続保持・監視継続を確認済み。"
+  "version": "1.0.23",
+  "url": "https://github.com/kurenai68-lang/kuro-auto-archive-updates/releases/download/v1.0.23/KURO_Auto_Archive_v1.0.23_Update.exe",
+  "notes": "v1.0.23: Hotfix10までの修正を統合。長時間VODの再実行・重複許可投稿・再実行済み履歴整理・YouTube認証安定化・進捗/速度表示・GUI例外対策を含む更新版。"
 }
