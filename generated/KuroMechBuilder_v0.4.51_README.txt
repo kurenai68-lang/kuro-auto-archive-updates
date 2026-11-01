@@ -1,0 +1,42 @@
+KuroMechBuilder v0.4.51 ModuleFastSpawn
+
+主な追加:
+- 複数パーツを再利用可能な「モジュール」として保存
+- モジュールを1コマンドで一括生成
+- 生成されたモジュールの1パーツをEで掴むと、全体をまとめて移動/回転/拡縮
+- Native Gibの高速バースト生成
+- 保存設計図ロード時も不足Nativeを自動高速生成
+- 永久設置も最大6 CreateGibsバッチ/約0.12秒間隔で高速復元
+- 進捗0なら高速Free復元を自動停止して無限生成を防止
+
+モジュール作成:
+1. /kmb free module new 頭セット
+2. 入れたいパーツを狙って /kmb free module add を繰り返す
+3. /kmb free module save
+4. /kmb free module spawn 頭セット
+
+作品全部をモジュール化:
+  /kmb free module saveall 名前
+
+一覧:
+  /kmb free module list
+
+削除:
+  /kmb free module delete 名前
+
+高速生成:
+  /kmb free fastspawn
+
+モジュール操作:
+- 生成済みモジュールのどれか1パーツを狙って E
+- MOVE / ROT_Y / ROT_X / ROT_Z / SCALE はモジュール全体へ適用
+- 左クリックで固定
+
+高速生成設定（config）:
+- FastNativeBurstSpawn = true
+- FastNativeBurstMaxBatches = 6
+- FastNativeBurstIntervalSeconds = 0.12
+
+注意:
+Rust側ではモジュール内部は個別Entityのままです。
+KuroMechBuilder側で同一ModuleIdを付け、1つの組み立て部品として操作します。
