@@ -5522,7 +5522,7 @@ namespace Oxide.Plugins
         private void StopFastFreeNativeRestore(ulong owner){Timer t;if(_fastFreeRestoreTimers.TryGetValue(owner,out t)){if(t!=null)t.Destroy();_fastFreeRestoreTimers.Remove(owner);}}
         private void StartFastFreeNativeRestore(BasePlayer user){
             if(user==null||!user.IsConnected)return;StopFastFreeNativeRestore(user.userID);if(!_config.EnableNativeScrapGibs||!_config.ExperimentalNativeWithoutHeli)return;Preview preview;if(!_previews.TryGetValue(user.userID,out preview))return;Blueprint bp=B(user);if(CountMissingFreeNative(preview,bp)==0)return;
-            Action tick=null;tick=()=>{BasePlayer p=BasePlayer.FindByID(user.userID);Preview pr;if(p==null||!p.IsConnected||!_previews.TryGetValue(user.userID,out pr)){StopFastFreeNativeRestore(user.userID);return;}Blueprint design=B(p);if(CountMissingFreeNative(pr,design)==0){StopFastFreeNativeRestore(user.userID);return;}FastRestoreFreeNativeBurst(p,pr,design);};
+            Action tick=null;tick=()=>{BasePlayer p=BasePlayer.FindByID(user.userID);Preview pr;if(p==null||!p.IsConnected||!_previews.TryGetValue(user.userID,out pr)){StopFastFreeNativeRestore(user.userID);return;}Blueprint design=B(p);if(CountMissingFreeNative(pr,design)==0){StopFastFreeNativeRestore(user.userID);return;}if(_nativeCapturing||Time.realtimeSinceStartup<_nativeNextAttempt)return;int placed=FastRestoreFreeNativeBurst(p,pr,design);if(placed==0)StopFastFreeNativeRestore(user.userID);};
             _fastFreeRestoreTimers[user.userID]=timer.Every(_config.FastNativeBurstSpawn?_config.FastNativeBurstIntervalSeconds:0.75f,tick);tick();
         }
         private void RepairInstalledFreeParts() {
